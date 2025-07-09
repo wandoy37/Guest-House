@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('class');
             $table->text('facility');
             $table->text('price');
-            $table->text('photo');
+            $table->text('photo')->nullable();
             $table->text('status');
             $table->timestamps();
         });

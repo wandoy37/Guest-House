@@ -25,6 +25,12 @@
                         <span>Room</span>
                     </a>
                 </li>
+                <li class="sidebar-item {{ request()->is('guest*') ? 'active' : '' }}">
+                    <a href="{{ route('guest.index') }}" class='sidebar-link'>
+                        <i class="bi bi-people"></i>
+                        <span>Guest</span>
+                    </a>
+                </li>
             </ul>
         </div>
         <button class="sidebar-toggler btn x"><i data-feather="x"></i></button>

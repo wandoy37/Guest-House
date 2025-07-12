@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\GuestController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoomController;
 
@@ -19,3 +20,4 @@ Route::get('/', function () {
 });
 
 Route::resource('room', RoomController::class);
+Route::resource('guest', GuestController::class);

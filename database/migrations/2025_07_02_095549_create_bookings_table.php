@@ -17,9 +17,9 @@ return new class extends Migration
             $table->unsignedBigInteger('room_id');
             $table->dateTime('checkin');
             $table->dateTime('checkout');
-            $table->dateTime('day');
+            $table->string('day');
             $table->dateTime('total_payment');
-            $table->dateTime('deposit');
+            $table->string('deposit');
             $table->timestamps();
 
             // Foreign key constraint

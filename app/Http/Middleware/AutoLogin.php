@@ -17,7 +17,7 @@ class AutoLogin
         }
 
         // Login dengan user ID yang diinginkan
-        $user = User::find(1); // Ganti ke ID yang diinginkan
+        $user = User::find(2); // Ganti ke ID yang diinginkan
         if ($user) {
             Auth::login($user);
         }

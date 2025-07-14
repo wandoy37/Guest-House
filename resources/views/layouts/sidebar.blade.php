@@ -31,6 +31,33 @@
                         <span>Guest</span>
                     </a>
                 </li>
+
+                <li class="sidebar-item {{ request()->is('report*') ? 'active' : '' }}">
+                    <a href="/" class='sidebar-link'>
+                        <i class="bi bi-clipboard-data"></i>
+                        <span>Report</span>
+                    </a>
+                </li>
+
+                <li class="sidebar-item {{ request()->is('booking*') ? 'active' : '' }}">
+                    <a href="{{ route('booking.index') }}" class='sidebar-link'>
+                        <i class="bi bi-box-arrow-in-left"></i>
+                        <span>Booking</span>
+                    </a>
+                </li>
+
+                <li class="sidebar-item {{ request()->is('checkin*') ? 'active' : '' }}">
+                    <a href="{{ route('check.in') }}" class='sidebar-link'>
+                        <i class="bi bi-box-arrow-in-right"></i>
+                        <span>Check-In</span>
+                    </a>
+                </li>
+                <li class="sidebar-item {{ request()->is('checkout*') ? 'active' : '' }}">
+                    <a href="{{ route('check.out') }}" class='sidebar-link'>
+                        <i class="bi bi-box-arrow-in-left"></i>
+                        <span>Check-Out</span>
+                    </a>
+                </li>
             </ul>
         </div>
         <button class="sidebar-toggler btn x"><i data-feather="x"></i></button>

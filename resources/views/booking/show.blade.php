@@ -157,7 +157,7 @@
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                     </div>
-                                    <div class="form-group my-4">
+                                    <div class="form-group my-4 booking-card" data-status="{{ $booking->status }}">
                                         <label>Action <span class="text-danger">*</span></label>
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="action" value="update"
@@ -174,12 +174,12 @@
                                             </label>
                                         </div>
                                     </div>
-                                    <div class="form-group my-4">
+                                    <div class="form-group my-4 booking-card" data-status="{{ $booking->status }}">
                                         <label>Note <span class="text-danger">*</span></label>
                                         <textarea class="form-control @error('note') is-invalid @enderror" name="note" rows="2" required>{{ old('note') }}</textarea>
                                     </div>
                                 </div>
-                                <div class="card-footer">
+                                <div class="card-footer booking-card" data-status="{{ $booking->status }}">
                                     <div class="float-end">
                                         <button type="submit" class="btn btn-outline-primary">Update</button>
                                     </div>
@@ -366,6 +366,14 @@
             formatInitialValues(); // Format nilai awal terlebih dahulu
             hitungHariDanTotal();
             hitungTotalPayment();
+        });
+    </script>
+
+    <script>
+        $('.booking-card').each(function() {
+            if ($(this).data('status') === 'checkout') {
+                $(this).hide(); // atau $(this).remove();
+            }
         });
     </script>
 @endpush

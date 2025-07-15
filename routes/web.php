@@ -32,12 +32,16 @@ Route::get('/checkin/reservation/{room}', [CheckInController::class, 'reservatio
 // Reservation Store
 Route::post('/checkin/reservation', [CheckInController::class, 'store'])->name('check.in.store');
 
-// Check-Out Controller
-Route::get('/checkout', [CheckOutController::class, 'index'])->name('check.out');
-
 // BookingController
 Route::get('/booking', [BookingController::class, 'index'])->name('booking.index');
 // Show Detail Booking
 Route::get('/booking/show/{booking}', [BookingController::class, 'show'])->name('booking.show');
 // Update Booking
 Route::patch('/booking/show/{booking}/update', [BookingController::class, 'update'])->name('booking.update');
+
+// Check-Out Controller
+Route::get('/checkout', [CheckOutController::class, 'index'])->name('check.out');
+// Checkout Detail
+Route::get('/checkout/show/{booking}', [CheckOutController::class, 'show'])->name('check.out.show');
+// Checkout Proses
+Route::patch('/checkout/booking/{booking}', [CheckOutController::class, 'checkoutBooking'])->name('check.out.booking');

@@ -58,17 +58,24 @@
                                                 <td>{{ \Carbon\Carbon::parse($booking->checkout)->format('d-m-Y') }}</td>
                                                 <td>{{ number_format($booking->total_payment, 0, ',', '.') }}</td>
                                                 <td>
-                                                    <span class="badge bg-primary">
-                                                        @php
-                                                            $status = match ($booking->status) {
-                                                                'checkin' => 'Check-In',
-                                                                'checkout' => 'Check-Out',
-                                                                'change_room' => 'Change Room',
-                                                                default => ucwords(
-                                                                    str_replace('_', ' ', $booking->status),
-                                                                ),
-                                                            };
-                                                        @endphp
+                                                    @php
+                                                        $status = match ($booking->status) {
+                                                            'checkin' => 'Check-In',
+                                                            'checkout' => 'Check-Out',
+                                                            default => ucwords(
+                                                                str_replace('_', ' ', $booking->status),
+                                                            ),
+                                                        };
+
+                                                        $badgeClass = match ($booking->status) {
+                                                            'checkin' => 'bg-primary',
+                                                            'checkout' => 'bg-success',
+                                                            default
+                                                                => 'bg-secondary', // atau warna lain sesuai kebutuhan
+                                                        };
+                                                    @endphp
+
+                                                    <span class="badge {{ $badgeClass }}">
                                                         {{ $status }}
                                                     </span>
                                                 </td>

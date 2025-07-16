@@ -19,7 +19,7 @@
         <section class="section">
             <div class="container">
                 <div class="row">
-                    @if (session('success'))
+                    {{-- @if (session('success'))
                         <div class="col-md-12">
                             <div class="alert alert-success alert-dismissible show fade">
                                 <Strong>Success </Strong> {{ session('success') }}
@@ -27,7 +27,7 @@
                                     aria-label="Close"></button>
                             </div>
                         </div>
-                    @endif
+                    @endif --}}
 
                     <div class="col-lg-12">
                         <div class="card">
@@ -80,9 +80,38 @@
                                                     </span>
                                                 </td>
                                                 <td>
-                                                    <a href="{{ route('booking.show', $booking->id) }}" class="btn btn-md">
-                                                        <i class="bi bi-pencil-square"></i>
-                                                    </a>
+                                                    <div class="btn-group mb-1">
+                                                        <div class="dropdown">
+                                                            <button class="btn btn-secondary btn-sm dropdown-toggle"
+                                                                type="button" id="dropdownMenuButton"
+                                                                data-bs-toggle="dropdown" aria-haspopup="true"
+                                                                aria-expanded="false">
+                                                                Action
+                                                            </button>
+                                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                                <a href="{{ route('booking.show', $booking->id) }}"
+                                                                    class="btn btn-md dropdown-item">
+                                                                    <i class="bi bi-pencil-square"></i>
+                                                                    Update
+                                                                </a>
+                                                                <button type="button"
+                                                                    class="btn btn-md dropdown-item btn-invocie"
+                                                                    data-id="{{ $booking->id }}">
+                                                                    <i class="bi bi-receipt "></i>
+                                                                    Invocie
+                                                                </button>
+                                                                <form id="invocie-form-{{ $booking->id }}"
+                                                                    action="{{ route('invoice.store') }}" method="POST"
+                                                                    style="display: none;">
+                                                                    @csrf
+                                                                    <input type="text" name="booking_id"
+                                                                        value="{{ $booking->id }}">
+                                                                    <input type="text" name="user_id"
+                                                                        value="{{ Auth::user()->id }}">
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -112,29 +141,45 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const deleteButtons = document.querySelectorAll('.btn-delete');
+            const invocieButtons = document.querySelectorAll('.btn-invocie');
 
-            deleteButtons.forEach(button => {
+            invocieButtons.forEach(button => {
                 button.addEventListener('click', function() {
                     const guestId = this.getAttribute('data-id');
 
                     Swal.fire({
-                        title: 'Are you sure you want to delete?',
-                        text: "Deleted data cannot be returned!",
+                        title: 'Are you sure you want to create this invoice?',
+                        text: "Once created, the invoice will be generated and cannot be undone!",
                         icon: 'warning',
                         showCancelButton: true,
-                        confirmButtonColor: '#d33',
+                        confirmButtonColor: '#435ebe',
                         cancelButtonColor: '#6c757d',
-                        confirmButtonText: 'Yes, delete it!',
+                        confirmButtonText: 'Yes, invocie it!',
                         cancelButtonText: 'Cancel'
                     }).then((result) => {
                         if (result.isConfirmed) {
                             // Submit form sesuai ID
-                            document.getElementById('delete-form-' + guestId).submit();
+                            document.getElementById('invocie-form-' + guestId).submit();
                         }
                     });
                 });
             });
         });
     </script>
+    @if (session('success'))
+        <script>
+            // Show success message
+            Swal.fire({
+                title: 'Success!',
+                text: '{{ session('success') }}',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            });
+
+            // Open invoice in new tab
+            @if (session('open_invoice'))
+                window.open('{{ session('open_invoice') }}', '_blank');
+            @endif
+        </script>
+    @endif
 @endpush

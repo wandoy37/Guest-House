@@ -4,6 +4,7 @@ use App\Http\Controllers\BookingController;
 use App\Http\Controllers\CheckInController;
 use App\Http\Controllers\CheckOutController;
 use App\Http\Controllers\GuestController;
+use App\Http\Controllers\InvoiceController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoomController;
 
@@ -77,3 +78,7 @@ Route::get('/checkout', [CheckOutController::class, 'index'])->name('check.out')
 Route::get('/checkout/show/{booking}', [CheckOutController::class, 'show'])->name('check.out.show');
 // Checkout Proses
 Route::patch('/checkout/booking/{booking}', [CheckOutController::class, 'checkoutBooking'])->name('check.out.booking');
+
+// InvoiceController
+Route::post('/invoice/store', [InvoiceController::class, 'store'])->name('invoice.store');
+Route::get('/invoice/show/{invoice:invoice_number}', [InvoiceController::class, 'show'])->name('invoice.show');

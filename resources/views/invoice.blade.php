@@ -171,8 +171,8 @@
         <div class="text-end pt-4 mt-4">
             <p><strong>Release Date:</strong> {{ \Carbon\Carbon::parse($invoice->created_at)->format('d-m-Y') }}
             </p>
-            <img src="{{ asset('assets/img/qr-placeholder.png') }}" alt="QR Code" width="100">
-            <p style="font-size: 12px;">Scan to validate digital invoice</p>
+            {!! QrCode::size(75)->generate(route('invoice.show', $invoice->invoice_number)) !!}
+            <p style="font-size: 12px;" class="mt-4">Scan to validate digital invoice</p>
         </div>
     </div>
 

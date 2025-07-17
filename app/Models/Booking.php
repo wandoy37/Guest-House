@@ -38,4 +38,9 @@ class Booking extends Model
     {
         return $this->checkout ? Carbon::parse($this->checkout)->format('Y-m-d') : '';
     }
+
+    public function invoice()
+    {
+        return $this->hasOne(Invoice::class);
+    }
 }

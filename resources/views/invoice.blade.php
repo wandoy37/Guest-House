@@ -103,8 +103,8 @@
                 </p>
             </div>
             <div class="text-end">
-                <h4>INVOICE</h4>
-                <p>No. Faktur: <strong>{{ $invoice->invoice_number }}</strong></p>
+                <h4>PAID</h4>
+                <p class="fst-italic">No. Invoice: <strong>#{{ $invoice->invoice_number }}</strong></p>
                 <span class="paid-stamp">LUNAS</span>
             </div>
 

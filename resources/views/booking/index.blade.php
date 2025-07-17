@@ -32,7 +32,7 @@
                     <div class="col-lg-12">
                         <div class="card">
                             <div class="card-body">
-                                <table class="table table-striped" id="table1">
+                                <table class="table table-striped bookings-table" id="table1">
                                     <thead>
                                         <tr>
                                             <th>No</th>
@@ -94,21 +94,32 @@
                                                                     <i class="bi bi-pencil-square"></i>
                                                                     Update
                                                                 </a>
-                                                                <button type="button"
-                                                                    class="btn btn-md dropdown-item btn-invocie"
-                                                                    data-id="{{ $booking->id }}">
-                                                                    <i class="bi bi-receipt "></i>
-                                                                    Invocie
-                                                                </button>
-                                                                <form id="invocie-form-{{ $booking->id }}"
-                                                                    action="{{ route('invoice.store') }}" method="POST"
-                                                                    style="display: none;">
-                                                                    @csrf
-                                                                    <input type="text" name="booking_id"
-                                                                        value="{{ $booking->id }}">
-                                                                    <input type="text" name="user_id"
-                                                                        value="{{ Auth::user()->id }}">
-                                                                </form>
+                                                                @unless ($booking->invoice)
+                                                                    <button type="button"
+                                                                        class="btn btn-md dropdown-item btn-invocie"
+                                                                        data-id="{{ $booking->id }}">
+                                                                        <i class="bi bi-receipt "></i>
+                                                                        Invoice
+                                                                    </button>
+
+                                                                    <form id="invocie-form-{{ $booking->id }}"
+                                                                        action="{{ route('invoice.store') }}" method="POST"
+                                                                        style="display: none;">
+                                                                        @csrf
+                                                                        <input type="text" name="booking_id"
+                                                                            value="{{ $booking->id }}">
+                                                                        <input type="text" name="user_id"
+                                                                            value="{{ Auth::user()->id }}">
+                                                                    </form>
+                                                                @endunless
+
+                                                                @isset($booking->invoice)
+                                                                    <a href="{{ route('invoice.show', $booking->invoice) }}"
+                                                                        target="_blank" class="btn btn-md dropdown-item">
+                                                                        <i class="bi bi-receipt"></i>
+                                                                        Invoice
+                                                                    </a>
+                                                                @endisset
                                                             </div>
                                                         </div>
                                                     </div>
@@ -182,4 +193,12 @@
             @endif
         </script>
     @endif
+
+    <script>
+        $(document).ready(function() {
+            $('#bookings-table').DataTable({
+                "ordering": false
+            });
+        });
+    </script>
 @endpush

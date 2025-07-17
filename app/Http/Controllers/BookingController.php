@@ -16,7 +16,7 @@ class BookingController extends Controller
     {
         $bookings = Booking::with(['guest', 'room', 'logs.user'])
             ->whereIn('status', ['checkin', 'checkout'])
-            ->orderBy('checkin', 'desc')
+            ->orderBy('id', 'desc')
             ->get();
 
         return view('booking.index', compact('bookings'));

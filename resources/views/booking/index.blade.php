@@ -19,7 +19,7 @@
         <section class="section">
             <div class="container">
                 <div class="row">
-                    {{-- @if (session('success'))
+                    @if (session('success'))
                         <div class="col-md-12">
                             <div class="alert alert-success alert-dismissible show fade">
                                 <Strong>Success </Strong> {{ session('success') }}
@@ -27,7 +27,7 @@
                                     aria-label="Close"></button>
                             </div>
                         </div>
-                    @endif --}}
+                    @endif
 
                     <div class="col-md-12">
                         <div class="btn-group mb-3 float-end" role="group" aria-label="Filter Status">

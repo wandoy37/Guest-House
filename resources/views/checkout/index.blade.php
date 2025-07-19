@@ -28,57 +28,59 @@
                             </div>
                         </div>
                     @endif
-                    <div class="col-md-12">
-                        <div class="btn-group mb-3 float-end" role="group" aria-label="Filter Status">
-                            <a href="{{ route('check.in') }}"
-                                class="btn {{ !request('status') ? 'btn-primary' : 'btn-outline-primary' }}">
-                                All
-                            </a>
-                            <a href="{{ route('check.in', ['status' => 'available']) }}"
-                                class="btn {{ request('status') == 'available' ? 'btn-primary' : 'btn-outline-primary' }}">
-                                Available
-                            </a>
-                            <a href="{{ route('check.in', ['status' => 'checkin']) }}"
-                                class="btn {{ request('status') == 'checkin' ? 'btn-primary' : 'btn-outline-primary' }}">
-                                Check-In
-                            </a>
-                            <a href="{{ route('check.in', ['status' => 'checkout']) }}"
-                                class="btn {{ request('status') == 'checkout' ? 'btn-primary' : 'btn-outline-primary' }}">
-                                Check-Out
-                            </a>
-                        </div>
-                    </div>
-                    @foreach ($bookings as $booking)
-                        <div class="col-md-4">
-                            <div class="card">
-                                <div class="card-content">
-                                    <div class="card-body">
-                                        <h4 class="card-title">{{ $booking->room->class }}
-                                            <span class="badge bg-primary">
-                                                @php
-                                                    $status = match ($booking->status) {
-                                                        'checkin' => 'Check-In',
-                                                        default => ucwords(str_replace('_', ' ', $booking->status)),
-                                                    };
-                                                @endphp
-                                                {{ $status }}
-                                            </span>
-                                        </h4>
-                                        <p class="card-text">
-                                            {{ $booking->room->name }}
-                                        </p>
-                                    </div>
-                                    <img class="img-fluid w-100" src="{{ asset('storage/' . $booking->room->photo) }}"
-                                        alt="Card image cap">
-                                </div>
-                                <div class="card-footer text-center">
-                                    <a href="{{ route('check.out.show', $booking->id) }}" class="btn btn-outline-primary">
-                                        Detail
-                                    </a>
-                                </div>
+
+                    @if ($bookings->isEmpty())
+                        <div class="col-12 text-center">
+                            <div class="alert alert-light-primary color-primary">
+                                Check-Out Data Not Available
                             </div>
                         </div>
-                    @endforeach
+                    @else
+                        @foreach ($bookings as $booking)
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <div class="card-content">
+                                        <div class="card-body">
+                                            <h4 class="card-title">{{ $booking->room->class }}
+                                                <span class="badge bg-primary">
+                                                    @php
+                                                        $status = match ($booking->status) {
+                                                            'checkin' => 'Check-In',
+                                                            default => ucwords(
+                                                                str_replace('_', ' ', $booking->status),
+                                                            ),
+                                                        };
+                                                    @endphp
+                                                    {{ $status }}
+                                                </span>
+                                            </h4>
+                                            <p class="card-text">
+                                                {{ $booking->room->name }}
+                                            </p>
+                                            <div style="font-size: 11pt;" class="text-center">
+                                                <span class="badge bg-light-primary my-1">
+                                                    <strong>Check-In Date</strong>
+                                                    {{ \Carbon\Carbon::parse($booking->checkin)->format('d-m-Y') }}
+                                                </span>
+                                                <span class="badge bg-light-primary my-1">
+                                                    <strong>Check-Out Date</strong>
+                                                    {{ \Carbon\Carbon::parse($booking->checkout)->format('d-m-Y') }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <img class="img-fluid w-100" src="{{ asset('storage/' . $booking->room->photo) }}"
+                                            alt="Card image cap">
+                                    </div>
+                                    <div class="card-footer text-center">
+                                        <a href="{{ route('check.out.show', $booking->id) }}"
+                                            class="btn btn-outline-primary">
+                                            Detail
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    @endif
                 </div>
             </div>
         </section>

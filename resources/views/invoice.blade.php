@@ -103,9 +103,9 @@
                 </p>
             </div>
             <div class="text-end">
-                <h4>PAID</h4>
+                <h4>INVOICE</h4>
                 <p class="fst-italic">No. Invoice: <strong>#{{ $invoice->invoice_number }}</strong></p>
-                <span class="paid-stamp">LUNAS</span>
+                <span class="paid-stamp">PAID</span>
             </div>
 
         </div>

@@ -38,14 +38,6 @@
                                 class="btn {{ request('status') == 'available' ? 'btn-primary' : 'btn-outline-primary' }}">
                                 Available
                             </a>
-                            <a href="{{ route('check.in', ['status' => 'checkin']) }}"
-                                class="btn {{ request('status') == 'checkin' ? 'btn-primary' : 'btn-outline-primary' }}">
-                                Check-In
-                            </a>
-                            <a href="{{ route('check.in', ['status' => 'checkout']) }}"
-                                class="btn {{ request('status') == 'checkout' ? 'btn-primary' : 'btn-outline-primary' }}">
-                                Check-Out
-                            </a>
                         </div>
                     </div>
                     @foreach ($rooms as $room)
@@ -56,7 +48,11 @@
                                         <h4 class="card-title">{{ $room->class }}
                                             <span
                                                 class="badge {{ $room->status == 'available' ? 'bg-primary' : ($room->status == 'checkin' ? 'bg-secondary' : ($room->status == 'checkout' ? 'bg-warning text-dark' : 'bg-light text-dark')) }}">
-                                                {{ ucfirst($room->status) }}
+                                                @if ($room->status == 'checkin')
+                                                    Not Available
+                                                @else
+                                                    {{ ucfirst($room->status) }}
+                                                @endif
                                             </span>
                                         </h4>
                                         <p class="card-text">
@@ -72,7 +68,7 @@
                                         <a href="{{ route('check.in.reservation', $room->id) }}"
                                             class="btn btn-outline-primary">Reservation</a>
                                     @else
-                                        <a href="http://" class="btn btn-secondary">Detail</a>
+                                        <span style="font-style: italic; margin-bottom:14px">Not Available</span>
                                     @endif
                                 </div>
                             </div>

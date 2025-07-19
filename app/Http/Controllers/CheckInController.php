@@ -60,7 +60,7 @@ class CheckInController extends Controller
             'room_charge' => $roomCharge,
             'deposit' => $deposit,
             'total_payment' => $totalPayment,
-            'status' => 'checkin',
+            'status' => 'Guest checkin',
         ]);
 
         // Catat ke booking_logs

@@ -12,14 +12,24 @@ use Illuminate\Support\Facades\DB;
 
 class BookingController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $bookings = Booking::with(['guest', 'room', 'logs.user'])
-            ->whereIn('status', ['checkin', 'checkout'])
-            ->orderBy('id', 'desc')
-            ->get();
+        // Ambil parameter status dari query string
+        $status = $request->get('status');
 
-        return view('booking.index', compact('bookings'));
+        // Bangun query awal, tanpa langsung eksekusi
+        $query = Booking::with(['guest', 'room', 'logs.user'])
+            ->orderBy('id', 'desc');
+
+        // Kalau ada filter status yang valid, tambahkan kondisi where
+        if ($status && in_array($status, ['checkin', 'checkout', 'cancel'])) {
+            $query->where('status', $status);
+        }
+
+        // Baru eksekusi get() sekali
+        $bookings = $query->get();
+
+        return view('booking.index', compact('bookings', 'status'));
     }
 
     public function show($id)
@@ -139,5 +149,18 @@ class BookingController extends Controller
             DB::rollback();
             return redirect()->back()->with('error', 'Gagal update booking: ' . $e->getMessage())->withInput();
         }
+    }
+
+    public function detail($id)
+    {
+        $booking = Booking::with(['guest', 'room', 'logs.user'])
+            ->where('id', $id)
+            ->first();
+
+        if (!$booking) {
+            return redirect()->back()->with('error', 'Booking not found');
+        }
+
+        return view('booking.detail', compact('booking'));
     }
 }

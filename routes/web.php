@@ -5,6 +5,7 @@ use App\Http\Controllers\CheckInController;
 use App\Http\Controllers\CheckOutController;
 use App\Http\Controllers\GuestController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoomController;
 
@@ -67,10 +68,12 @@ Route::post('/checkin/reservation', [CheckInController::class, 'store'])->name('
 
 // BookingController
 Route::get('/booking', [BookingController::class, 'index'])->name('booking.index');
-// Show Detail Booking
+// Show Update Booking
 Route::get('/booking/show/{booking}', [BookingController::class, 'show'])->name('booking.show');
 // Update Booking
 Route::patch('/booking/show/{booking}/update', [BookingController::class, 'update'])->name('booking.update');
+// Detail Booking
+Route::get('/booking/detail/{booking}', [BookingController::class, 'detail'])->name('booking.detail');
 
 // Check-Out Controller
 Route::get('/checkout', [CheckOutController::class, 'index'])->name('check.out');
@@ -82,3 +85,6 @@ Route::patch('/checkout/booking/{booking}', [CheckOutController::class, 'checkou
 // InvoiceController
 Route::post('/invoice/store', [InvoiceController::class, 'store'])->name('invoice.store');
 Route::get('/invoice/show/{invoice:invoice_number}', [InvoiceController::class, 'show'])->name('invoice.show');
+
+// ReportController
+Route::get('/report/booking', [ReportController::class, 'bookingReport'])->name('report.booking.index');

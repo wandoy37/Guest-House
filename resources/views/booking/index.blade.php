@@ -29,6 +29,27 @@
                         </div>
                     @endif --}}
 
+                    <div class="col-md-12">
+                        <div class="btn-group mb-3 float-end" role="group" aria-label="Filter Status">
+                            <a href="{{ route('booking.index') }}"
+                                class="btn {{ !request('status') ? 'btn-primary' : 'btn-outline-primary' }}">
+                                All
+                            </a>
+                            <a href="{{ route('booking.index', ['status' => 'checkin']) }}"
+                                class="btn {{ request('status') == 'checkin' ? 'btn-primary' : 'btn-outline-primary' }}">
+                                Check-In
+                            </a>
+                            <a href="{{ route('booking.index', ['status' => 'checkout']) }}"
+                                class="btn {{ request('status') == 'checkout' ? 'btn-primary' : 'btn-outline-primary' }}">
+                                Check-Out
+                            </a>
+                            <a href="{{ route('booking.index', ['status' => 'cancel']) }}"
+                                class="btn {{ request('status') == 'cancel' ? 'btn-primary' : 'btn-outline-primary' }}">
+                                Cancel
+                            </a>
+                        </div>
+                    </div>
+
                     <div class="col-lg-12">
                         <div class="card">
                             <div class="card-body">
@@ -89,35 +110,46 @@
                                                                 Action
                                                             </button>
                                                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                                <a href="{{ route('booking.show', $booking->id) }}"
-                                                                    class="btn btn-md dropdown-item">
-                                                                    <i class="bi bi-pencil-square"></i>
-                                                                    Update
-                                                                </a>
-                                                                @unless ($booking->invoice)
-                                                                    <button type="button"
-                                                                        class="btn btn-md dropdown-item btn-invocie"
-                                                                        data-id="{{ $booking->id }}">
-                                                                        <i class="bi bi-receipt "></i>
-                                                                        Invoice
-                                                                    </button>
+                                                                @if ($booking->status === 'checkin')
+                                                                    <a href="{{ route('booking.show', $booking->id) }}"
+                                                                        class="btn btn-md dropdown-item">
+                                                                        <i class="bi bi-pencil-square"></i>
+                                                                        Update
+                                                                    </a>
+                                                                @else
+                                                                    <a href="{{ route('booking.detail', $booking->id) }}"
+                                                                        class="btn btn-md dropdown-item">
+                                                                        <i class="bi bi-pencil-square"></i>
+                                                                        Detail
+                                                                    </a>
+                                                                @endif
 
-                                                                    <form id="invocie-form-{{ $booking->id }}"
-                                                                        action="{{ route('invoice.store') }}" method="POST"
-                                                                        style="display: none;">
-                                                                        @csrf
-                                                                        <input type="text" name="booking_id"
-                                                                            value="{{ $booking->id }}">
-                                                                        <input type="text" name="user_id"
-                                                                            value="{{ Auth::user()->id }}">
-                                                                    </form>
+                                                                @unless ($booking->invoice)
+                                                                    @if ($booking->status !== 'cancel')
+                                                                        <button type="button"
+                                                                            class="btn btn-md dropdown-item btn-invocie"
+                                                                            data-id="{{ $booking->id }}">
+                                                                            <i class="bi bi-receipt "></i>
+                                                                            Create Invoice
+                                                                        </button>
+
+                                                                        <form id="invocie-form-{{ $booking->id }}"
+                                                                            action="{{ route('invoice.store') }}"
+                                                                            method="POST" style="display: none;">
+                                                                            @csrf
+                                                                            <input type="text" name="booking_id"
+                                                                                value="{{ $booking->id }}">
+                                                                            <input type="text" name="user_id"
+                                                                                value="{{ Auth::user()->id }}">
+                                                                        </form>
+                                                                    @endif
                                                                 @endunless
 
                                                                 @isset($booking->invoice)
                                                                     <a href="{{ route('invoice.show', $booking->invoice) }}"
                                                                         target="_blank" class="btn btn-md dropdown-item">
                                                                         <i class="bi bi-receipt"></i>
-                                                                        Invoice
+                                                                        Print Invoice
                                                                     </a>
                                                                 @endisset
                                                             </div>

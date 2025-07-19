@@ -31,14 +31,7 @@
                         <span>Guest</span>
                     </a>
                 </li>
-
-                <li class="sidebar-item {{ request()->is('report*') ? 'active' : '' }}">
-                    <a href="/" class='sidebar-link'>
-                        <i class="bi bi-clipboard-data"></i>
-                        <span>Report</span>
-                    </a>
-                </li>
-
+                <hr>
                 <li class="sidebar-item {{ request()->is('booking*') ? 'active' : '' }}">
                     <a href="{{ route('booking.index') }}" class='sidebar-link'>
                         <i class="bi bi-box-arrow-in-left"></i>
@@ -57,6 +50,27 @@
                         <i class="bi bi-box-arrow-in-left"></i>
                         <span>Check-Out</span>
                     </a>
+                </li>
+                <hr>
+                <li class="sidebar-item {{ request()->is('report*') ? 'active' : '' }} has-sub">
+                    <a href="#" class="sidebar-link">
+                        <i class="bi bi-clipboard-data"></i>
+                        <span>Report</span>
+                    </a>
+                    <ul class="submenu" style="display: none;">
+                        <li class="submenu-item ">
+                            <a href="{{ route('report.booking.index') }}">Booking Report</a>
+                        </li>
+                        <li class="submenu-item ">
+                            <a href="error-404.html">Revenue Report</a>
+                        </li>
+                        <li class="submenu-item ">
+                            <a href="error-500.html">Guest Report</a>
+                        </li>
+                        <li class="submenu-item ">
+                            <a href="error-500.html">Invoice Report</a>
+                        </li>
+                    </ul>
                 </li>
             </ul>
         </div>

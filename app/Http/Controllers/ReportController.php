@@ -11,12 +11,9 @@ class ReportController extends Controller
     // 1. Booking Report
     public function bookingReport(Request $request)
     {
-        // Logic for generating booking report description
-        // Menampilkan jumlah dan detail tamu yang checkin dan checkout pada periode tertentu
-        // tampilkan tanggal checkin dan checkout, nama tamu, kelas kamar nomor kamar, dan status pembayaran
-        // Contoh:
         $query = Booking::with(['guest', 'room', 'invoice'])
-            ->where('status', 'checkout');
+            ->where('status', 'checkout')
+            ->orderBy('id', 'desc');
 
         if ($request->filled('checkin') && $request->filled('checkout')) {
             // Rentang waktu
@@ -32,13 +29,19 @@ class ReportController extends Controller
         $bookings = $query->get();
 
         return view('report.booking.index', compact('bookings'));
-        // - Tanggal Checkin: 2023-10-01
-        // - Tanggal Checkout: 2023-10-05
-        // - Nama Tamu: John Doe
-        // - Kelas Kamar: Deluxe
-        // - Nomor Kamar: 101
-        // - Status Pembayaran: Lunas
-        // - Total Bayar: Rp 1.500.000
+    }
+
+    public function bookingReportShow($id)
+    {
+        $booking = Booking::with(['guest', 'room', 'logs.user'])
+            ->where('id', $id)
+            ->first();
+
+        if (!$booking) {
+            return redirect()->back()->with('error', 'Booking not found');
+        }
+
+        return view('booking.detail', compact('booking'));
     }
 
     // 2. Revenue Report
@@ -75,6 +78,20 @@ class ReportController extends Controller
         // - bookings.checkin
         // - bookings.checkout
 
+        $guests = \App\Models\Booking::with('guest')
+            ->where('status', 'checkout')
+            ->orderBy('checkout', 'desc')
+            ->get()
+            ->map(function ($booking) {
+                return [
+                    'name' => $booking->guest->name ?? '-',
+                    'identity_number' => $booking->guest->identity_number ?? '-',
+                    'checkin' => $booking->checkin,
+                    'checkout' => $booking->checkout,
+                ];
+            });
+
+        return view('report.guest.index', compact('guests'));
     }
 
     // 4. Invoice Report

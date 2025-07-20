@@ -105,20 +105,10 @@
                                                 </td>
                                                 <td>{{ number_format($booking->room_charge, 0, ',', '.') }}</td>
                                                 <td>
-                                                    <a href="{{ route('guest.edit', $booking->id) }}" class="btn btn-md">
-                                                        <i class="bi bi-pencil-square"></i>
+                                                    <a href="{{ route('report.booking.show', $booking->id) }}"
+                                                        class="btn btn-md text-primary">
+                                                        <i class="bi bi-eye"></i>
                                                     </a>
-                                                    <button type="button" class="btn btn-md text-danger ms-2 btn-delete"
-                                                        data-id="{{ $booking->id }}">
-                                                        <i class="bi bi-trash"></i>
-                                                    </button>
-
-                                                    <form id="delete-form-{{ $booking->id }}"
-                                                        action="{{ route('guest.destroy', $booking->id) }}" method="POST"
-                                                        style="display: none;">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                    </form>
                                                 </td>
                                             </tr>
                                         @endforeach

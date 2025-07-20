@@ -60,7 +60,7 @@ class CheckInController extends Controller
             'room_charge' => $roomCharge,
             'deposit' => $deposit,
             'total_payment' => $totalPayment,
-            'status' => 'Guest checkin',
+            'status' => 'checkin',
         ]);
 
         // Catat ke booking_logs
@@ -68,7 +68,7 @@ class CheckInController extends Controller
             'booking_id' => $booking->id,
             'user_id' => $request->user_id,
             'action' => 'checkin',
-            'description' => 'checkin',
+            'description' => 'guest checkin',
         ]);
 
         // Update Status Room

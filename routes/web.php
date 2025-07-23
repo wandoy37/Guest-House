@@ -3,11 +3,13 @@
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\CheckInController;
 use App\Http\Controllers\CheckOutController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GuestController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoomController;
+use App\Services\RevenueService;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,37 +26,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/invoice', function () {
-    return view('invoice', [
-        'guesthouse' => [
-            'name' => 'SiGH Guest House',
-            'address' => 'Jl. Mawar No. 10, Samarinda',
-            'email' => 'admin@sighgh.id',
-            'phone' => '0812-3456-7890'
-        ],
-        'guest' => [
-            'name' => 'Rasya',
-            'address' => 'Jl. Melati No. 2',
-            'email' => 'rasya@mail.com',
-            'phone' => '0851-1234-5678'
-        ],
-        'invoice_number' => 'INV-20250715-001',
-        'booking' => [
-            'checkin' => '2025-07-14',
-            'checkout' => '2025-07-16',
-        ],
-        'room' => [
-            'class' => 'Standar Double Bed',
-            'price' => 175000,
-            'days' => 2
-        ],
-        'payment' => [
-            'room_charge' => 175000 * 2,
-            'deposit' => 50000,
-            'total' => (175000 * 2) + 50000
-        ]
-    ]);
-});
+// Dashboard Controller
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+
+Route::get('/pendapatan/harian', [RevenueService::class, 'harian']);
+Route::get('/pendapatan/mingguan', [RevenueService::class, 'mingguan']);
+Route::get('/pendapatan/bulanan', [RevenueService::class, 'bulanan']);
 
 Route::resource('room', RoomController::class);
 Route::resource('guest', GuestController::class);

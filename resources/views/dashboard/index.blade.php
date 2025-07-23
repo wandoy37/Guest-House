@@ -6,7 +6,7 @@
 
 @section('content')
     <div class="page-heading">
-        <h3>Profile Statistics</h3>
+        <h3>Today Informations</h3>
     </div>
     <div class="page-content">
         <div class="row">
@@ -20,7 +20,7 @@
                                 </div>
                             </div>
                             <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                                <h6 class="text-muted font-semibold">Today's Revenue</h6>
+                                <h6 class="text-muted font-semibold">Revenue</h6>
                                 <h6 class="font-extrabold mb-0">{{ number_format($todaysRevenue, 0, ',', '.') }}</h6>
                             </div>
                         </div>
@@ -33,12 +33,12 @@
                         <div class="row">
                             <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start ">
                                 <div class="stats-icon blue mb-2">
-                                    <i class="iconly-boldProfile"></i>
+                                    <i class="bi-box-arrow-in-right"></i>
                                 </div>
                             </div>
                             <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                                <h6 class="text-muted font-semibold">Today's Check-Ins</h6>
-                                <h6 class="font-extrabold mb-0">183.000</h6>
+                                <h6 class="text-muted font-semibold">Check-Ins</h6>
+                                <h6 class="font-extrabold mb-0">{{ $checkIns->count() }}</h6>
                             </div>
                         </div>
                     </div>
@@ -54,8 +54,8 @@
                                 </div>
                             </div>
                             <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                                <h6 class="text-muted font-semibold">Today's Check-Outs</h6>
-                                <h6 class="font-extrabold mb-0">80.000</h6>
+                                <h6 class="text-muted font-semibold">Check-Outs</h6>
+                                <h6 class="font-extrabold mb-0">{{ $checkOuts->count() }}</h6>
                             </div>
                         </div>
                     </div>
@@ -72,7 +72,7 @@
                             </div>
                             <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
                                 <h6 class="text-muted font-semibold">Available Rooms</h6>
-                                <h6 class="font-extrabold mb-0">112</h6>
+                                <h6 class="font-extrabold mb-0">{{ $available->count() }}</h6>
                             </div>
                         </div>
                     </div>
@@ -83,7 +83,7 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title">Weekly Chart Revenue</h4>
+                        <h4 class="card-title">Weekly Revenue</h4>
                     </div>
                     <div class="card-body">
                         <canvas id="weeklyChart" width="400" height="150"></canvas>

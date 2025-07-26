@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Booking;
+use App\Models\Guest;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Services\RevenueService;
@@ -89,18 +90,17 @@ class ReportController extends Controller
     }
 
     // 3. Guest Report
-    public function guestReport()
+    public function guestReport(Request $request)
     {
-        // Logic for generating guest report
-        // Menampilkan data tamu yang pernah menginap contoh :
-        // - guests.name
-        // - guests.identity_number
-        // - bookings.checkin
-        // - bookings.checkout
+        $query = Booking::with('guest')
+            ->whereNot('status', 'cancel');
 
-        $guests = \App\Models\Booking::with('guest')
-            ->where('status', 'checkout')
-            ->orderBy('checkout', 'desc')
+        // Filter berdasarkan guest_id jika ada di request
+        if ($request->filled('guest_id')) {
+            $query->where('guest_id', $request->guest_id);
+        }
+
+        $guests = $query->orderBy('checkout', 'desc')
             ->get()
             ->map(function ($booking) {
                 return [
@@ -111,7 +111,9 @@ class ReportController extends Controller
                 ];
             });
 
-        return view('report.guest.index', compact('guests'));
+        $dataGuest = Guest::all();
+
+        return view('report.guest', compact('guests', 'dataGuest'));
     }
 
     // 4. Invoice Report

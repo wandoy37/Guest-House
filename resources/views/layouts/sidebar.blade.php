@@ -99,7 +99,7 @@
                             </a>
                         </li>
                         <li class="submenu-item {{ request()->is('report/guest*') ? 'active' : '' }}">
-                            <a href="/" class="submenu-link">
+                            <a href="{{ route('guest.revenue') }}" class="submenu-link">
                                 Guest Report
                             </a>
                         </li>

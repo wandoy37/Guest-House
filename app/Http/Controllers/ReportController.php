@@ -5,30 +5,46 @@ namespace App\Http\Controllers;
 use App\Models\Booking;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use App\Services\RevenueService;
 
 class ReportController extends Controller
 {
+    protected $revenueService;
+
+    public function __construct(RevenueService $revenueService)
+    {
+        $this->revenueService = $revenueService;
+    }
+
     // 1. Booking Report
     public function bookingReport(Request $request)
     {
-        $query = Booking::with(['guest', 'room', 'invoice'])
-            ->where('status', 'checkout')
-            ->orderBy('id', 'desc');
+        // Ambil parameter period_start dan period_end dari form
+        $periodStart = $request->input('period_start');
+        $periodEnd = $request->input('period_end');
 
-        if ($request->filled('checkin') && $request->filled('checkout')) {
-            // Rentang waktu
-            $query->whereDate('checkin', '>=', $request->checkin)
-                ->whereDate('checkout', '<=', $request->checkout);
-        } elseif ($request->filled('checkout')) {
-            // Hanya checkout tertentu
-            $query->whereDate('checkout', $request->checkout);
-        } elseif ($request->filled('checkin')) {
-            $query->whereDate('checkin', $request->checkin);
+        // Mulai query booking yang status checkout
+        $query = Booking::whereNot('status', 'cancel');
+
+        // Jika user tidak mengisi period_start & period_end → default bulan ini
+        if (!$periodStart && !$periodEnd) {
+            $query->whereMonth('checkout', now()->month)
+                ->whereYear('checkout', now()->year);
         }
 
-        $bookings = $query->get();
+        // Jika ada periode, tambahkan filter
+        if ($periodStart) {
+            $query->whereDate('checkout', '>=', $periodStart);
+        }
+        if ($periodEnd) {
+            $query->whereDate('checkout', '<=', $periodEnd);
+        }
 
-        return view('report.booking.index', compact('bookings'));
+        // Urutkan dari checkout terbaru
+        $bookings = $query->orderBy('checkout', 'desc')->get();
+
+        // Kirim data ke blade
+        return view('report.booking.index', compact('bookings', 'periodStart', 'periodEnd'));
     }
 
     public function bookingReportShow($id)
@@ -41,31 +57,35 @@ class ReportController extends Controller
             return redirect()->back()->with('error', 'Booking not found');
         }
 
-        return view('booking.detail', compact('booking'));
+        return view('report.booking.show', compact('booking'));
     }
 
     // 2. Revenue Report
-    public function revenueReport()
+    public function revenueReport(RevenueService $revenueService)
     {
-        // Logic for generating revenue report
-        // Menampilkan total pendapatan contoh :
-        // - bookings.total_payment
-        // - invoices.created_at
-        // - invoices.invoice_number
+        // Ambil data harian bulan ini
+        $monthly = $revenueService->getMonthlyRevenue();
+        // return response()->json($monthly);
 
-        // Ambil data booking yang sudah checkout beserta invoice
-        $revenues = Booking::with('invoice')
-            ->where('status', 'checkout')
-            ->get();
+        // Kelompokkan data ke minggu ke-n dalam bulan
+        $weeklyRevenue = collect($monthly['data'])
+            ->groupBy(function ($item) {
+                return Carbon::parse($item['tanggal'])->weekOfMonth;
+            })
+            ->map(function ($items) {
+                return $items->sum('pendapatan');
+            });
 
-        // Hitung total pendapatan
-        $totalRevenue = $revenues->sum('total_payment');
-        return response()->json([
-            'total_revenue' => $totalRevenue,
-            'revenues' => $revenues
-        ]);
+        // Ambil minggu yang tersedia secara otomatis
+        $maxWeek = $weeklyRevenue->keys()->max();
+        $weeklyLabels = [];
+        $weeklyValues = [];
+        for ($i = 1; $i <= $maxWeek; $i++) {
+            $weeklyLabels[] = 'Week ' . $i;
+            $weeklyValues[] = $weeklyRevenue->get($i, 0); // default 0 jika minggu kosong
+        }
 
-        return view('report.revenue', compact('revenues', 'totalRevenue'));
+        return view('report.revenue', compact('weeklyLabels', 'weeklyValues', 'monthly'));
     }
 
     // 3. Guest Report

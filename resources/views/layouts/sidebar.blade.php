@@ -94,7 +94,7 @@
                             </a>
                         </li>
                         <li class="submenu-item {{ request()->is('report/revenue*') ? 'active' : '' }}">
-                            <a href="/" class="submenu-link">
+                            <a href="{{ route('report.revenue') }}" class="submenu-link">
                                 Revenue Report
                             </a>
                         </li>

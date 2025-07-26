@@ -66,3 +66,5 @@ Route::get('/invoice/show/{invoice:invoice_number}', [InvoiceController::class, 
 // ReportController
 Route::get('/report/booking', [ReportController::class, 'bookingReport'])->name('report.booking.index');
 Route::get('/report/booking/show/{report}', [ReportController::class, 'bookingReportShow'])->name('report.booking.show');
+// Revenue Report
+Route::get('/report/revenue', [ReportController::class, 'revenueReport'])->name('report.revenue');

@@ -6,147 +6,131 @@
 
 @section('content')
     <div class="page-heading">
-        <div class="container">
-            <div class="page-title">
-                <div class="row">
-                    <div class="col-12 col-md-6 order-md-1 order-last">
-                        <h3>Reservation</h3>
+        <h3>Reservation</h3>
+    </div>
+    <div class="page-content">
+        <div class="row py-2">
+            <div class="col-md-12">
+                <a href="{{ route('check.in') }}" class="btn btn-primary mb-4">
+                    Back
+                </a>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-content">
+                        <div class="card-body">
+                            <h4 class="card-title">{{ $room->class }}</h4>
+                            <p class="card-text">Room Number - {{ $room->name }}</p>
+                            <p class="card-text">Fasilitas : {{ $room->facility }}</p>
+                        </div>
+                        <img class="img-fluid w-100" src="{{ asset('storage/' . $room->photo) }}" alt="Card image cap">
+                    </div>
+                    <div class="card-footer d-flex justify-content-center">
+                        <h2 class="fst-italic">{{ 'Rp. ' . number_format($room->price, 0, ',', '.') }}</h2>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <section class="section">
-            <div class="container">
-                <hr>
-                <div class="row py-2">
-
-                    <div class="col-md-12">
-                        <a href="{{ route('check.in') }}" class="btn btn-primary mb-4">
-                            Back
-                        </a>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card">
-                            <div class="card-content">
-                                <div class="card-body">
-                                    <h4 class="card-title">{{ $room->class }}</h4>
-                                    <p class="card-text">Room Number - {{ $room->name }}</p>
-                                    <p class="card-text">Fasilitas : {{ $room->facility }}</p>
-                                </div>
-                                <img class="img-fluid w-100" src="{{ asset('storage/' . $room->photo) }}"
-                                    alt="Card image cap">
+            <div class="col-md-8">
+                <form action="{{ route('check.in.store') }}" method="POST">
+                    @csrf
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="fw-bold">Data Booking</h4>
+                            <input type="text" name="user_id" value="{{ auth()->user()->id }}" hidden>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label>Data Guest</label>
+                                <input type="text" name="status" value="checkin" hidden>
+                                <input type="text" name="room_id" value="{{ $room->id }}" hidden>
+                                <select class="form-select select2 @error('guest_id') is-invalid @enderror" name="guest_id">
+                                    <option value="">-- Select --</option>
+                                    @foreach ($guests as $guest)
+                                        <option value="{{ $guest->id }}" @selected(old('guest_id') == $guest->id)>
+                                            {{ $guest->name }} - {{ $guest->identity_number }}
+                                    @endforeach
+                                </select>
+                                @error('guest_id')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
                             </div>
-                            <div class="card-footer d-flex justify-content-center">
-                                <h2 class="fst-italic">{{ 'Rp. ' . number_format($room->price, 0, ',', '.') }}</h2>
+                            <div class="row py-2">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Check-In</label>
+                                        <input type="date" id="checkin"
+                                            class="form-control @error('checkin') is-invalid @enderror" name="checkin"
+                                            value="{{ old('checkin') }}">
+                                        @error('checkin')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Check-Out</label>
+                                        <input type="date" id="checkout"
+                                            class="form-control @error('checkout') is-invalid @enderror" name="checkout"
+                                            value="{{ old('checkout') }}">
+                                        @error('checkout')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Number of days</label>
+                                        <input type="number" id="jumlahHari"
+                                            class="form-control @error('day') is-invalid @enderror" name="day"
+                                            placeholder="Number of days" value="{{ old('day') }}" readonly>
+                                        @error('day')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Room Charge</label>
+                                <input type="hidden" id="roomPrice" value="{{ $room->price }}">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">Rp</span>
+                                    <input type="text" id="roomCharge" class="form-control" name="room_charge"
+                                        placeholder="Room Charge" value="{{ old('room_charge') }}" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Deposit</label>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">Rp</span>
+                                    <input type="text" id="rupiahInput"
+                                        class="form-control @error('deposit') is-invalid @enderror" name="deposit"
+                                        placeholder="Deposit" value="{{ old('deposit', '0') }}">
+                                </div>
+                                @error('deposit')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div class="form-group">
+                                <label>Total Payment</label>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">Rp</span>
+                                    <input type="text" class="form-control @error('total_payment') is-invalid @enderror"
+                                        name="total_payment" placeholder="total_payment" readonly>
+                                </div>
+                                @error('total_payment')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="float-end">
+                                <button type="submit" class="btn btn-outline-primary">Check-In</button>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-8">
-                        <form action="{{ route('check.in.store') }}" method="POST">
-                            @csrf
-                            <div class="card">
-                                <div class="card-header">
-                                    <h4 class="fw-bold">Data Booking</h4>
-                                    <input type="text" name="user_id" value="{{ auth()->user()->id }}" hidden>
-                                </div>
-                                <div class="card-body">
-                                    <div class="form-group">
-                                        <label>Data Guest</label>
-                                        <input type="text" name="status" value="checkin" hidden>
-                                        <input type="text" name="room_id" value="{{ $room->id }}" hidden>
-                                        <select class="form-select select2 @error('guest_id') is-invalid @enderror"
-                                            name="guest_id">
-                                            <option value="">-- Select --</option>
-                                            @foreach ($guests as $guest)
-                                                <option value="{{ $guest->id }}" @selected(old('guest_id') == $guest->id)>
-                                                    {{ $guest->name }} - {{ $guest->identity_number }}
-                                            @endforeach
-                                        </select>
-                                        @error('guest_id')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-                                    <div class="row py-2">
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label>Check-In</label>
-                                                <input type="date" id="checkin"
-                                                    class="form-control @error('checkin') is-invalid @enderror"
-                                                    name="checkin" value="{{ old('checkin') }}">
-                                                @error('checkin')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label>Check-Out</label>
-                                                <input type="date" id="checkout"
-                                                    class="form-control @error('checkout') is-invalid @enderror"
-                                                    name="checkout" value="{{ old('checkout') }}">
-                                                @error('checkout')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label>Number of days</label>
-                                                <input type="number" id="jumlahHari"
-                                                    class="form-control @error('day') is-invalid @enderror" name="day"
-                                                    placeholder="Number of days" value="{{ old('day') }}" readonly>
-                                                @error('day')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Room Charge</label>
-                                        <input type="hidden" id="roomPrice" value="{{ $room->price }}">
-                                        <div class="input-group mb-3">
-                                            <span class="input-group-text">Rp</span>
-                                            <input type="text" id="roomCharge" class="form-control" name="room_charge"
-                                                placeholder="Room Charge" value="{{ old('room_charge') }}" readonly>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Deposit</label>
-                                        <div class="input-group mb-3">
-                                            <span class="input-group-text">Rp</span>
-                                            <input type="text" id="rupiahInput"
-                                                class="form-control @error('deposit') is-invalid @enderror" name="deposit"
-                                                placeholder="Deposit" value="{{ old('deposit', '0') }}">
-                                        </div>
-                                        @error('deposit')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Total Payment</label>
-                                        <div class="input-group mb-3">
-                                            <span class="input-group-text">Rp</span>
-                                            <input type="text"
-                                                class="form-control @error('total_payment') is-invalid @enderror"
-                                                name="total_payment" placeholder="total_payment" readonly>
-                                        </div>
-                                        @error('total_payment')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <div class="card-footer">
-                                    <div class="float-end">
-                                        <button type="submit" class="btn btn-outline-primary">Check-In</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+                </form>
             </div>
-        </section>
+        </div>
     </div>
 @endsection
 

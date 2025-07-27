@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Invoice Pembayaran - {{ $invoice->invoice_number }}</title>
-    <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.css') }}"> --}}
+    <link rel="stylesheet" href="{{ asset('assets') }}/compiled/css/app.css">
     <style>
         @page {
             size: A4;

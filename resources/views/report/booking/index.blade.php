@@ -107,8 +107,8 @@
                                         <td>{{ number_format($booking->room_charge, 0, ',', '.') }}</td>
                                         <td>
                                             <a href="{{ route('report.booking.show', $booking->id) }}"
-                                                class="btn btn-md text-primary">
-                                                <i class="bi bi-eye"></i>
+                                                class="btn btn-sm btn-primary">
+                                                Detail
                                             </a>
                                         </td>
                                     </tr>

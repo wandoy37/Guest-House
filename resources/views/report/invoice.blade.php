@@ -1,66 +1,38 @@
 @extends('layouts.app')
 
 @section('title')
-    Guest
+    Invoice Report
 @endsection
 
 @section('content')
     <div class="page-heading">
-        <h3>Manage Guest</h3>
+        <h3>Invoice Report</h3>
     </div>
     <div class="page-content">
         <div class="row">
-            <div class="col-lg-12">
-
-                @if (session('success'))
-                    <div class="alert alert-success alert-dismissible show fade">
-                        <Strong>Success </Strong> {{ session('success') }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                @endif
-
-
-
-                <a href="{{ route('guest.create') }}" class="btn btn-primary mb-4">
-                    New guest
-                </a>
-
+            <div class="col-md-12">
                 <div class="card">
                     <div class="card-body">
                         <table class="table table-striped" id="table1">
                             <thead>
                                 <tr>
-                                    <th>Identity type</th>
-                                    <th>Identity number</th>
-                                    <th>Name</th>
-                                    <th>Address</th>
+                                    <th>Release Date</th>
+                                    <th>Invoice Number</th>
+                                    <th>Guest</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($guests as $guest)
+                                @foreach ($invoices as $invoice)
                                     <tr>
-                                        <td>{{ $guest->type }}</td>
-                                        <td>{{ $guest->identity_number }}</td>
-                                        <td>{{ $guest->name }}</td>
-                                        <td>{{ $guest->address }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($invoice->created_at)->format('d-m-Y') }}</td>
+                                        <td>{{ $invoice->invoice_number }}</td>
+                                        <td>{{ $invoice->guest->name }}</td>
                                         <td>
-                                            <a href="{{ route('guest.edit', $guest->id) }}" class="btn btn-md">
-                                                <i class="bi bi-pencil-square"></i>
+                                            <a href="{{ route('invoice.show', $invoice->invoice_number) }}" target="_blank"
+                                                class="btn btn-sm btn-primary">
+                                                <i class="bi bi-receipt"></i>
                                             </a>
-                                            <!-- Tombol delete -->
-                                            <button type="button" class="btn btn-md text-danger ms-2 btn-delete"
-                                                data-id="{{ $guest->id }}">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
-
-                                            <!-- Form delete disembunyikan -->
-                                            <form id="delete-form-{{ $guest->id }}"
-                                                action="{{ route('guest.destroy', $guest->id) }}" method="POST"
-                                                style="display: none;">
-                                                @csrf
-                                                @method('DELETE')
-                                            </form>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -76,12 +48,10 @@
 @push('style')
     <link rel="stylesheet" href="{{ asset('assets') }}/extensions/simple-datatables/style.css">
     <link rel="stylesheet" href="{{ asset('assets') }}/compiled/css/table-datatable.css">
-    <link rel="stylesheet" href="{{ asset('assets') }}/extensions/sweetalert2/sweetalert2.min.css">
 @endpush
 
 @push('script')
     <script src="{{ asset('assets') }}/extensions/simple-datatables/umd/simple-datatables.js"></script>
-    <script src="{{ asset('assets') }}/extensions/sweetalert2/sweetalert2.min.js"></script>>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             // Inisialisasi simpleDatatables cukup sekali
@@ -139,34 +109,6 @@
 
             // Re-patch pagination after the page was changed
             dataTable.on("datatable.page", adaptPagination)
-        });
-    </script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const deleteButtons = document.querySelectorAll('.btn-delete');
-
-            deleteButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const roomId = this.getAttribute('data-id');
-
-                    Swal.fire({
-                        title: 'Are you sure you want to delete?',
-                        text: "Deleted data cannot be returned!",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#d33',
-                        cancelButtonColor: '#6c757d',
-                        confirmButtonText: 'Yes, delete it!',
-                        cancelButtonText: 'Cancel'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            // Submit form sesuai ID
-                            document.getElementById('delete-form-' + roomId).submit();
-                        }
-                    });
-                });
-            });
         });
     </script>
 @endpush

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Booking;
 use App\Models\Guest;
+use App\Models\Invoice;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Services\RevenueService;
@@ -106,12 +107,15 @@ class ReportController extends Controller
                 return [
                     'name' => $booking->guest->name ?? '-',
                     'identity_number' => $booking->guest->identity_number ?? '-',
+                    'booking_id' => $booking->id,
                     'checkin' => $booking->checkin,
                     'checkout' => $booking->checkout,
                 ];
             });
 
         $dataGuest = Guest::all();
+
+        // return response()->json($guests);
 
         return view('report.guest', compact('guests', 'dataGuest'));
     }
@@ -124,6 +128,13 @@ class ReportController extends Controller
         // - invocies.invoice_number
         // - users.username -> melihat siapa yang membuat invoice
         // - invocies.created_at
+        $invoices = Invoice::with('guest')
+            ->orderBy('created_at', 'desc')
+            ->get();
 
+        // return response()->json($invoices);
+
+        // Kirim data ke blade
+        return view('report.invoice', compact('invoices'));
     }
 }

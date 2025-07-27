@@ -104,7 +104,7 @@
                             </a>
                         </li>
                         <li class="submenu-item {{ request()->is('report/invoice*') ? 'active' : '' }}">
-                            <a href="/" class="submenu-link">
+                            <a href="{{ route('invoice.revenue') }}" class="submenu-link">
                                 Invoice Report
                             </a>
                         </li>

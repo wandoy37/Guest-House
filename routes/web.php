@@ -68,4 +68,7 @@ Route::get('/report/booking', [ReportController::class, 'bookingReport'])->name(
 Route::get('/report/booking/show/{report}', [ReportController::class, 'bookingReportShow'])->name('report.booking.show');
 // Revenue Report
 Route::get('/report/revenue', [ReportController::class, 'revenueReport'])->name('report.revenue');
+// Guest Report
 Route::get('/report/guest', [ReportController::class, 'guestReport'])->name('guest.revenue');
+// Invoice Report
+Route::get('/report/invoice', [ReportController::class, 'invoiceReport'])->name('invoice.revenue');

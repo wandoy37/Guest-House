@@ -47,6 +47,7 @@
                                     <th>Guest Name</th>
                                     <th>Check-In</th>
                                     <th>Check-Out</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -55,6 +56,12 @@
                                         <td>{{ $guest['name'] }}</td>
                                         <td>{{ \Carbon\Carbon::parse($guest['checkin'])->format('d-m-Y') }}</td>
                                         <td>{{ \Carbon\Carbon::parse($guest['checkout'])->format('d-m-Y') }}</td>
+                                        <td>
+                                            <a href="{{ route('booking.detail', $guest['booking_id']) }}" target="_blank"
+                                                class="btn btn-sm btn-primary">
+                                                Detail
+                                            </a>
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>

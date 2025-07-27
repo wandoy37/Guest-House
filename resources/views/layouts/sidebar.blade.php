@@ -42,7 +42,7 @@
         </div>
         <div class="sidebar-menu">
             <ul class="menu">
-                <li class="sidebar-title">Menu</li>
+                <li class="sidebar-title">Master</li>
 
                 <li class="sidebar-item {{ request()->is('dashboard*') ? 'active' : '' }}">
                     <a href="{{ route('dashboard.index') }}" class='sidebar-link'>
@@ -62,6 +62,13 @@
                         <span>Guest</span>
                     </a>
                 </li>
+                <li class="sidebar-item {{ request()->is('user*') ? 'active' : '' }}">
+                    <a href="{{ route('user.index') }}" class='sidebar-link'>
+                        <i class="bi bi-person-gear"></i>
+                        <span>Users</span>
+                    </a>
+                </li>
+                <li class="sidebar-title">Services</li>
                 <li class="sidebar-item {{ request()->is('booking*') ? 'active' : '' }}">
                     <a href="{{ route('booking.index') }}" class='sidebar-link'>
                         <i class="bi bi-buildings"></i>
@@ -80,7 +87,7 @@
                         <span>Check-Out</span>
                     </a>
                 </li>
-                <hr>
+                <li class="sidebar-title">Management</li>
                 <li
                     class="sidebar-item has-sub {{ request()->is('report/booking*') || request()->is('report/revenue*') || request()->is('report/guest*') || request()->is('report/invoice*') ? 'active' : '' }}">
                     <a href="#" class="sidebar-link">

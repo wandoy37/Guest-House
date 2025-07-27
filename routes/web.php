@@ -9,6 +9,7 @@ use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoomController;
+use App\Http\Controllers\UserController;
 use App\Services\RevenueService;
 
 /*
@@ -72,3 +73,21 @@ Route::get('/report/revenue', [ReportController::class, 'revenueReport'])->name(
 Route::get('/report/guest', [ReportController::class, 'guestReport'])->name('guest.revenue');
 // Invoice Report
 Route::get('/report/invoice', [ReportController::class, 'invoiceReport'])->name('invoice.revenue');
+
+// Tampilkan semua user
+Route::get('/user', [UserController::class, 'index'])->name('user.index');
+
+// Tampilkan form tambah user
+Route::get('/user/create', [UserController::class, 'create'])->name('user.create');
+
+// Proses simpan user baru
+Route::post('/user', [UserController::class, 'store'])->name('user.store');
+
+// Tampilkan form edit user
+Route::get('/user/{user}/edit', [UserController::class, 'edit'])->name('user.edit');
+
+// Proses update user
+Route::put('/user/{user}', [UserController::class, 'update'])->name('user.update');
+
+// Hapus user
+Route::delete('/user/{user}', [UserController::class, 'destroy'])->name('user.destroy');

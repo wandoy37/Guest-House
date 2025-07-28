@@ -159,7 +159,7 @@ return [
         /*
          * Package Service Providers...
          */
-
+        App\Providers\FortifyServiceProvider::class,
         /*
          * Application Service Providers...
          */
@@ -183,6 +183,7 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
+        'Fortify' => App\Providers\FortifyServiceProvider::class
     ])->toArray(),
 
 ];

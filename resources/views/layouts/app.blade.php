@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - @yield('title')</title>
+    <title>StayGo - @yield('title')</title>
 
     <link rel="shortcut icon" href="{{ asset('assets') }}/compiled/svg/favicon_gh.svg" type="image/x-icon">
     <link rel="shortcut icon"
@@ -13,7 +13,9 @@
     <link rel="stylesheet" href="{{ asset('assets') }}/compiled/css/app.css">
     <link rel="stylesheet" href="{{ asset('assets') }}/compiled/css/app-dark.css">
     <link rel="stylesheet" href="{{ asset('assets') }}/compiled/css/iconly.css">
-
+    @if (session('notAccess'))
+        <link rel="stylesheet" href="{{ asset('assets') }}/extensions/sweetalert2/sweetalert2.min.css">
+    @endif
     @stack('style')
 </head>
 
@@ -54,14 +56,6 @@
                                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton"
                                         style="min-width: 11rem;">
                                         <li>
-                                            <a class="dropdown-item" href="#">
-                                                <i class="icon-mid bi bi-gear me-2"></i>
-                                                Settings
-                                            </a>
-                                        </li>
-                                        <hr class="dropdown-divider">
-                                        </li>
-                                        <li>
                                             <form method="POST" action="{{ route('logout') }}">
                                                 @csrf
                                                 <button type="submit" class="dropdown-item">
@@ -96,6 +90,19 @@
     <script src="{{ asset('assets') }}/static/js/components/dark.js"></script>
     <script src="{{ asset('assets') }}/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
     <script src="{{ asset('assets') }}/compiled/js/app.js"></script>
+
+    @if (session('notAccess'))
+        <script src="{{ asset('assets') }}/extensions/sweetalert2/sweetalert2.min.js"></script>>
+        <script>
+            Swal.fire({
+                icon: 'warning',
+                title: '{{ session('notAccess') }}',
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#435ebe', // biru
+            });
+        </script>
+    @endif
+
     @stack('script')
 </body>
 

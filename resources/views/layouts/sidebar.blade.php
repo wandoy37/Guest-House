@@ -42,81 +42,104 @@
         </div>
         <div class="sidebar-menu">
             <ul class="menu">
-                <li class="sidebar-title">Master</li>
+                @php
+                    $role = Auth::user()->role;
+                @endphp
+                {{-- Menu Admin, Manager and Receptionis --}}
+                @if ($role == 'admin' || $role == 'manager' || $role == 'receptionist')
+                    <li class="sidebar-title">Master</li>
 
-                <li class="sidebar-item {{ request()->is('dashboard*') ? 'active' : '' }}">
-                    <a href="{{ route('dashboard.index') }}" class='sidebar-link'>
-                        <i class="bi bi-grid-fill"></i>
-                        <span>Dashboard</span>
-                    </a>
-                </li>
-                <li class="sidebar-item {{ request()->is('room*') ? 'active' : '' }}">
-                    <a href="{{ route('room.index') }}" class='sidebar-link'>
-                        <i class="bi bi-door-open"></i>
-                        <span>Room</span>
-                    </a>
-                </li>
-                <li class="sidebar-item {{ request()->is('guest*') ? 'active' : '' }}">
-                    <a href="{{ route('guest.index') }}" class='sidebar-link'>
-                        <i class="bi bi-people"></i>
-                        <span>Guest</span>
-                    </a>
-                </li>
-                <li class="sidebar-item {{ request()->is('user*') ? 'active' : '' }}">
-                    <a href="{{ route('user.index') }}" class='sidebar-link'>
-                        <i class="bi bi-person-gear"></i>
-                        <span>Users</span>
-                    </a>
-                </li>
-                <li class="sidebar-title">Services</li>
-                <li class="sidebar-item {{ request()->is('booking*') ? 'active' : '' }}">
-                    <a href="{{ route('booking.index') }}" class='sidebar-link'>
-                        <i class="bi bi-buildings"></i>
-                        <span>Booking</span>
-                    </a>
-                </li>
-                <li class="sidebar-item {{ request()->is('checkin*') ? 'active' : '' }}">
-                    <a href="{{ route('check.in') }}" class='sidebar-link'>
-                        <i class="bi bi-box-arrow-in-right"></i>
-                        <span>Check-In</span>
-                    </a>
-                </li>
-                <li class="sidebar-item {{ request()->is('checkout*') ? 'active' : '' }}">
-                    <a href="{{ route('check.out') }}" class='sidebar-link'>
-                        <i class="bi bi-box-arrow-in-left"></i>
-                        <span>Check-Out</span>
-                    </a>
-                </li>
-                <li class="sidebar-title">Management</li>
-                <li
-                    class="sidebar-item has-sub {{ request()->is('report/booking*') || request()->is('report/revenue*') || request()->is('report/guest*') || request()->is('report/invoice*') ? 'active' : '' }}">
-                    <a href="#" class="sidebar-link">
-                        <i class="bi bi-clipboard-data"></i>
-                        <span>Report</span>
-                    </a>
-                    <ul class="submenu">
-                        <li class="submenu-item {{ request()->is('report/booking*') ? 'active' : '' }}">
-                            <a href="{{ route('report.booking.index') }}" class="submenu-link">
-                                Booking Report
-                            </a>
-                        </li>
-                        <li class="submenu-item {{ request()->is('report/revenue*') ? 'active' : '' }}">
-                            <a href="{{ route('report.revenue') }}" class="submenu-link">
-                                Revenue Report
-                            </a>
-                        </li>
-                        <li class="submenu-item {{ request()->is('report/guest*') ? 'active' : '' }}">
-                            <a href="{{ route('guest.revenue') }}" class="submenu-link">
-                                Guest Report
-                            </a>
-                        </li>
-                        <li class="submenu-item {{ request()->is('report/invoice*') ? 'active' : '' }}">
-                            <a href="{{ route('invoice.revenue') }}" class="submenu-link">
-                                Invoice Report
-                            </a>
-                        </li>
-                    </ul>
-                </li>
+                    <li class="sidebar-item {{ request()->is('dashboard*') ? 'active' : '' }}">
+                        <a href="{{ route('dashboard.index') }}" class='sidebar-link'>
+                            <i class="bi bi-grid-fill"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                @endif
+
+                {{-- Menu Admin and Manager --}}
+                @if ($role == 'admin' || $role == 'manager')
+                    <li class="sidebar-item {{ request()->is('room*') ? 'active' : '' }}">
+                        <a href="{{ route('room.index') }}" class='sidebar-link'>
+                            <i class="bi bi-door-open"></i>
+                            <span>Room</span>
+                        </a>
+                    </li>
+                @endif
+                @if ($role == 'admin' || $role == 'manager' || $role == 'receptionist')
+                    <li class="sidebar-item {{ request()->is('guest*') ? 'active' : '' }}">
+                        <a href="{{ route('guest.index') }}" class='sidebar-link'>
+                            <i class="bi bi-people"></i>
+                            <span>Guest</span>
+                        </a>
+                    </li>
+                @endif
+                @if ($role == 'admin' || $role == 'manager')
+                    <li class="sidebar-item {{ request()->is('user*') ? 'active' : '' }}">
+                        <a href="{{ route('user.index') }}" class='sidebar-link'>
+                            <i class="bi bi-person-gear"></i>
+                            <span>Users</span>
+                        </a>
+                    </li>
+                @endif
+
+
+                {{-- Menu Admin and Receptionist --}}
+                @if ($role == 'admin' || $role == 'receptionist')
+                    <li class="sidebar-title">Services</li>
+                    <li class="sidebar-item {{ request()->is('booking*') ? 'active' : '' }}">
+                        <a href="{{ route('booking.index') }}" class='sidebar-link'>
+                            <i class="bi bi-buildings"></i>
+                            <span>Booking</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item {{ request()->is('checkin*') ? 'active' : '' }}">
+                        <a href="{{ route('check.in') }}" class='sidebar-link'>
+                            <i class="bi bi-box-arrow-in-right"></i>
+                            <span>Check-In</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item {{ request()->is('checkout*') ? 'active' : '' }}">
+                        <a href="{{ route('check.out') }}" class='sidebar-link'>
+                            <i class="bi bi-box-arrow-in-left"></i>
+                            <span>Check-Out</span>
+                        </a>
+                    </li>
+                @endif
+
+                {{-- Menu Admin and Manager --}}
+                @if ($role == 'admin' || $role == 'manager')
+                    <li class="sidebar-title">Management</li>
+                    <li
+                        class="sidebar-item has-sub {{ request()->is('report/booking*') || request()->is('report/revenue*') || request()->is('report/guest*') || request()->is('report/invoice*') ? 'active' : '' }}">
+                        <a href="#" class="sidebar-link">
+                            <i class="bi bi-clipboard-data"></i>
+                            <span>Report</span>
+                        </a>
+                        <ul class="submenu">
+                            <li class="submenu-item {{ request()->is('report/booking*') ? 'active' : '' }}">
+                                <a href="{{ route('report.booking.index') }}" class="submenu-link">
+                                    Booking Report
+                                </a>
+                            </li>
+                            <li class="submenu-item {{ request()->is('report/revenue*') ? 'active' : '' }}">
+                                <a href="{{ route('report.revenue') }}" class="submenu-link">
+                                    Revenue Report
+                                </a>
+                            </li>
+                            <li class="submenu-item {{ request()->is('report/guest*') ? 'active' : '' }}">
+                                <a href="{{ route('guest.revenue') }}" class="submenu-link">
+                                    Guest Report
+                                </a>
+                            </li>
+                            <li class="submenu-item {{ request()->is('report/invoice*') ? 'active' : '' }}">
+                                <a href="{{ route('invoice.revenue') }}" class="submenu-link">
+                                    Invoice Report
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                @endif
             </ul>
         </div>
     </div>

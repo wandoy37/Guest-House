@@ -27,17 +27,37 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'role:admin,manager,receptionist'])->group(function () {
     // Dashboard Controller
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
-
-    Route::get('/pendapatan/harian', [RevenueService::class, 'harian']);
-    Route::get('/pendapatan/mingguan', [RevenueService::class, 'mingguan']);
-    Route::get('/pendapatan/bulanan', [RevenueService::class, 'bulanan']);
-
-    Route::resource('room', RoomController::class);
+    // Guest Controller
     Route::resource('guest', GuestController::class);
+});
 
+Route::middleware(['auth', 'role:admin,manager'])->group(function () {
+    // Room Controller
+    Route::resource('room', RoomController::class);
+
+    // User Controller
+    Route::get('/user', [UserController::class, 'index'])->name('user.index');
+    Route::get('/user/create', [UserController::class, 'create'])->name('user.create');
+    Route::post('/user', [UserController::class, 'store'])->name('user.store');
+    Route::get('/user/{user}/edit', [UserController::class, 'edit'])->name('user.edit');
+    Route::put('/user/{user}', [UserController::class, 'update'])->name('user.update');
+    Route::delete('/user/{user}', [UserController::class, 'destroy'])->name('user.destroy');
+
+    // ReportController
+    Route::get('/report/booking', [ReportController::class, 'bookingReport'])->name('report.booking.index');
+    Route::get('/report/booking/show/{report}', [ReportController::class, 'bookingReportShow'])->name('report.booking.show');
+    // Revenue Report
+    Route::get('/report/revenue', [ReportController::class, 'revenueReport'])->name('report.revenue');
+    // Guest Report
+    Route::get('/report/guest', [ReportController::class, 'guestReport'])->name('guest.revenue');
+    // Invoice Report
+    Route::get('/report/invoice', [ReportController::class, 'invoiceReport'])->name('invoice.revenue');
+});
+
+Route::middleware(['auth', 'role:admin,receptionist'])->group(function () {
     // Check-In Controller
     Route::get('/checkin', [CheckInController::class, 'index'])->name('check.in');
     // Reservation
@@ -63,33 +83,6 @@ Route::middleware(['auth'])->group(function () {
 
     // InvoiceController
     Route::post('/invoice/store', [InvoiceController::class, 'store'])->name('invoice.store');
-    Route::get('/invoice/show/{invoice:invoice_number}', [InvoiceController::class, 'show'])->name('invoice.show');
-
-    // ReportController
-    Route::get('/report/booking', [ReportController::class, 'bookingReport'])->name('report.booking.index');
-    Route::get('/report/booking/show/{report}', [ReportController::class, 'bookingReportShow'])->name('report.booking.show');
-    // Revenue Report
-    Route::get('/report/revenue', [ReportController::class, 'revenueReport'])->name('report.revenue');
-    // Guest Report
-    Route::get('/report/guest', [ReportController::class, 'guestReport'])->name('guest.revenue');
-    // Invoice Report
-    Route::get('/report/invoice', [ReportController::class, 'invoiceReport'])->name('invoice.revenue');
-
-    // Tampilkan semua user
-    Route::get('/user', [UserController::class, 'index'])->name('user.index');
-
-    // Tampilkan form tambah user
-    Route::get('/user/create', [UserController::class, 'create'])->name('user.create');
-
-    // Proses simpan user baru
-    Route::post('/user', [UserController::class, 'store'])->name('user.store');
-
-    // Tampilkan form edit user
-    Route::get('/user/{user}/edit', [UserController::class, 'edit'])->name('user.edit');
-
-    // Proses update user
-    Route::put('/user/{user}', [UserController::class, 'update'])->name('user.update');
-
-    // Hapus user
-    Route::delete('/user/{user}', [UserController::class, 'destroy'])->name('user.destroy');
 });
+
+Route::get('/invoice/show/{invoice:invoice_number}', [InvoiceController::class, 'show'])->name('invoice.show');
